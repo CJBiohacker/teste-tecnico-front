@@ -2,8 +2,10 @@
 import { RouterView } from 'vue-router'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import { useThemeStore } from '@/stores/theme';
+import { computed } from 'vue';
 
 const { theme } = useThemeStore();
+const footerColor = computed(() => theme.color === 'light' ? 'green-accent-2' : 'black');
 </script>
 
 <template>
@@ -12,7 +14,8 @@ const { theme } = useThemeStore();
     <v-main>
       <RouterView />
     </v-main>
-    <v-footer class="d-flex justify-center">Made by CJ</v-footer>
+    <v-footer :class="`d-flex justify-center`" :color="footerColor">Criado por CJ Dev - {{ new Date().getFullYear()
+      }}</v-footer>
   </v-app>
 </template>
 
