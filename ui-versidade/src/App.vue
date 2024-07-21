@@ -1,22 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import HeaderComponent from '@/components/HeaderComponent.vue'
+import { useThemeStore } from '@/stores/theme';
+
+const { theme } = useThemeStore();
+
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <v-app :theme="theme.color" id="inspire">
+    <HeaderComponent />
+    <main>
+      <RouterView />
+    </main>
+  </v-app>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-</style>
