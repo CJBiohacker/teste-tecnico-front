@@ -4,14 +4,22 @@ import HeaderComponent from '@/components/HeaderComponent.vue'
 import { useThemeStore } from '@/stores/theme';
 
 const { theme } = useThemeStore();
-
 </script>
 
 <template>
   <v-app :theme="theme.color" id="inspire">
     <HeaderComponent />
-    <main>
+    <v-main>
       <RouterView />
-    </main>
+    </v-main>
+    <v-footer class="d-flex justify-center">Made by CJ</v-footer>
   </v-app>
 </template>
+
+<style scoped lang="scss">
+#inspire {
+  footer {
+    max-height: 50px;
+  }
+}
+</style>
