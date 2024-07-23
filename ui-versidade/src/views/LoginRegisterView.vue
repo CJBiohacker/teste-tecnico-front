@@ -123,8 +123,6 @@ export default defineComponent({
                                 </p>
                             </v-btn>
                         </v-card-text>
-                        {{ snackStatus }} +
-                        {{ snackMsg }}
                     </v-card>
                 </v-form>
             </v-container>
