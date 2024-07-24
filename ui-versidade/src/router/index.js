@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import UserCards from '@/components/UserCards.vue';
-import HomeWelcome from '@/views/HomeWelcome.vue';
-import LoginRegisterView from '@/views/LoginRegisterView.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import HomeWelcome from '@/views/HomeWelcome.vue'
+import LoginRegisterView from '@/views/LoginRegisterView.vue'
+import DashboardView from '@/views/DashboardView.vue'
+import UserCardsListView from '@/views/UserCardsListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,34 +16,33 @@ const router = createRouter({
     {
       path: '/users',
       name: 'listUsers',
-      component: () => UserCards,
-
+      component: () => UserCardsListView
     },
     {
       path: '/login',
       name: 'login',
-      component: () => LoginRegisterView,
+      component: () => LoginRegisterView
     },
     {
       path: '/register',
       name: 'register',
-      component: () => LoginRegisterView,
+      component: () => LoginRegisterView
     },
     {
       path: '/dashboard/:id',
       name: 'dashboard',
-      component: () => LoginRegisterView,
+      component: () => DashboardView
     }
   ]
-});
+})
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
   if (to.meta.requiresAuth && !authStore.user) {
-    next('/login');
+    next('/login')
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

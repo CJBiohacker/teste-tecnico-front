@@ -1,6 +1,7 @@
 <script>
 import { computed, defineComponent, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useSnackBarStore } from '@/stores/snackbar';
 import router from '@/router';
 import authService from '@/services/auth.service';
 
@@ -12,8 +13,6 @@ export default defineComponent({
         const email = ref('');
         const password = ref('');
         const visible = ref(false);
-        const snackStatus = ref(false);
-        const snackMsg = ref('');
 
         const emailRules = reactive([v => !!v || 'Digite um email', v => emailRegexp.test(v) || 'Formato de email inválido']);
         const passwordRules = reactive([v => !!v || 'Digite uma senha', v => (v && v.length < 6) ? 'Digite uma senha de 6 ou mais caracteres' : '']);
@@ -34,12 +33,12 @@ export default defineComponent({
 
 
         const registerSnackResponse = (statusCode) => {
+            const snackStore = useSnackBarStore();
             if (statusCode === 200 || statusCode === 201) {
-                snackMsg.value = "Usuário cadastrado com sucesso!";
+                snackStore.updateMessage("Usuário cadastrado com sucesso!");
             } else {
-                snackMsg.value = "Falha ao cadastrar o usuário!";
+                snackStore.updateMessage("Falha ao cadastrar o usuário!");
             }
-            snackStatus.value = !snackStatus.value;
         }
 
         const swapBetweenLoginRegisterView = () => {
@@ -88,8 +87,6 @@ export default defineComponent({
             isLoading,
             cardTitle,
             confirmBtnText,
-            snackStatus,
-            snackMsg,
             isValidForm,
             swapBetweenLoginRegisterView,
             registerSnackResponse,
@@ -139,8 +136,6 @@ export default defineComponent({
                 </v-form>
             </v-container>
         </v-col>
-        <v-snackbar :timeout="2000" v-model="snackStatus" color="deep-purple-accent-4" elevation="24">
-            {{ snackMsg }}
-        </v-snackbar>
+        
     </v-container>
 </template>
