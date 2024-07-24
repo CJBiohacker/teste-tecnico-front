@@ -66,7 +66,7 @@ export const useUserStore = defineStore('user', {
     async deleteUser(userId) {
       try {
         const url = `${API_BASE_URL}/users/${userId}`
-        await axios.delete(url)
+        const response =await axios.delete(url)
         return response
       } catch (error) {
         return error

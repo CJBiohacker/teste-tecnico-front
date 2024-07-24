@@ -1,10 +1,17 @@
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';;
 import { useDisplayStore } from '@/stores/display';
+import SingleUserCard from './SingleUserCard.vue';
 import userService from '@/services/user.service';
 import helpers from '@/helpers/helpers';
 
 export default defineComponent({
+  components: {
+    SingleUserCard
+  },
+  props: {
+    
+  },
   async setup() {
 
     const { displayValues } = useDisplayStore();
@@ -76,36 +83,13 @@ export default defineComponent({
         <v-container class="pa-2">
           <v-row dense class="justify-center align-center">
             <v-col v-for="item in items" :key="item.id" :cols=responsiveCols md="4">
-              <!-- CONVERTER EM COMPONENTE - USERCARD -->
-              <v-card color="indigo" height="420">
-                <v-card-item>
-                  <p class="text-h6">ID: {{ item.raw.id }}</p>
-                  <div class="d-flex flex-column justify-space-around align-center">
-                    <div class="text-center">
-                      <v-card-title class="text-h4">
-                        {{ item.raw.first_name }}
-                      </v-card-title>
-                      <v-card-title class="text-h5">
-                        {{ item.raw.last_name }}
-                      </v-card-title>
-                      <v-card-subtitle>{{ item.raw.email }}</v-card-subtitle>
-                    </div>
-
-                    <v-avatar class="ma-3" rounded="0" size="160">
-                      <v-img :src="item.raw.avatar"></v-img>
-                    </v-avatar>
-                  </div>
-                  <div class="d-flex justify-space-around">
-                    <v-card-actions>
-                      <v-btn class="" rounded="lg" variant="flat" color="yellow">Editar</v-btn>
-                    </v-card-actions>
-                    <v-card-actions>
-                      <v-btn class="" rounded="lg" variant="flat" color="#f00023">Excluir</v-btn>
-                    </v-card-actions>
-                  </div>
-                </v-card-item>
-                
-              </v-card>
+               <SingleUserCard 
+                :id="item.raw.id"
+                :firstName="item.raw.first_name"
+                :lastName="item.raw.last_name"
+                :email="item.raw.email"
+                :avatarUrl="item.raw.avatar"
+               />
             </v-col>
           </v-row>
         </v-container>
