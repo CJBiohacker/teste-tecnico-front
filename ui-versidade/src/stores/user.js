@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
-export const useUserStore = defineStore('auth', {
+export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
     userListData: null
@@ -19,11 +19,20 @@ export const useUserStore = defineStore('auth', {
         return error
       }
     },
-    async listUsers(pageNumber) {
+    async listUsers() {
       try {
-        const url = `${API_BASE_URL}/users?page=${pageNumber}`
-        const response = await axios.get(url)
-        this.userListData = response.data
+        const urlOne = `${API_BASE_URL}/users?page=1`
+        const responseOne = await axios.get(urlOne)
+        const urlTwo = `${API_BASE_URL}/users?page=2`
+        const responseTwo = await axios.get(urlTwo)
+
+        const response = {
+          data: [...responseOne.data.data, ...responseTwo.data.data],
+          page: responseOne.data.page,
+          per_page: responseOne.data.per_page,
+          total: responseOne.data.total,
+          total_pages: responseOne.data.total_pages
+        }
         return response
       } catch (error) {
         return error
