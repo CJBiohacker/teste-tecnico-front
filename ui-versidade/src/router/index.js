@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => LoginRegisterView,
+    },
+    {
+      path: '/dashboard/:id',
+      name: 'dashboard',
+      component: () => LoginRegisterView,
     }
   ]
 });

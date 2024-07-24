@@ -1,8 +1,8 @@
 <script>
-import router from '@/router';
-import authService from '@/services/auth.service';
 import { computed, defineComponent, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
+import authService from '@/services/auth.service';
 
 export default defineComponent({
     setup() {
@@ -17,10 +17,15 @@ export default defineComponent({
 
         const emailRules = reactive([v => !!v || 'Digite um email', v => emailRegexp.test(v) || 'Formato de email inválido']);
         const passwordRules = reactive([v => !!v || 'Digite uma senha', v => (v && v.length < 6) ? 'Digite uma senha de 6 ou mais caracteres' : '']);
+        const isLoading = reactive({ value: false })
 
         const confirmBtnText = computed(() => {
             return route.name === 'login' ? 'Entrar' : 'Cadastrar'
         });
+
+        const cardTitle = computed(() => {
+            return route.name === 'login' ? 'Login' : 'Cadastro'
+        })
 
         const isValidForm = () => {
             const condition = emailRegexp.test(email.value) && (password.value.length >= 6);
@@ -37,7 +42,7 @@ export default defineComponent({
             snackStatus.value = !snackStatus.value;
         }
 
-        const goToLoginRegisterView = () => {
+        const swapBetweenLoginRegisterView = () => {
             if (route.name === 'login') {
                 router.push({ name: 'register' });
             }
@@ -47,14 +52,18 @@ export default defineComponent({
         }
 
         const handleForm = async () => {
-            let userCredentials, response;
+            let userCredentials;
+            let response;
+            isLoading.value = !isLoading.value
             if (confirmBtnText.value === 'Entrar') {
                 userCredentials = {
                     email: email.value,
                     password: password.value,
                 }
-                response = await authService.login(userCredentials);
 
+                response = await authService.login(userCredentials);
+                isLoading.value = !isLoading.value
+                router.push({ name: 'dashboard' });
             }
 
             if (confirmBtnText.value === 'Cadastrar') {
@@ -63,11 +72,10 @@ export default defineComponent({
                     password: password.value,
                 }
                 response = await authService.register(userCredentials);
-
                 registerSnackResponse(response.status);
+                isLoading.value = !isLoading.value
+                router.push({ name: 'login' });
             }
-
-            return response.data;
         }
 
         return {
@@ -77,11 +85,13 @@ export default defineComponent({
             visible,
             emailRules,
             passwordRules,
+            isLoading,
+            cardTitle,
             confirmBtnText,
             snackStatus,
             snackMsg,
-            goToLoginRegisterView,
             isValidForm,
+            swapBetweenLoginRegisterView,
             registerSnackResponse,
             handleForm
         }
@@ -94,7 +104,9 @@ export default defineComponent({
         <v-col cols="md-6 lg-4" offset="sm-3 md-2">
             <v-container>
                 <v-form fast-fail @submit.prevent="handleForm()">
-                    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+                    <v-card class="mx-auto pa-12 pb-8" :loading="isLoading.value" elevation="8" max-width="448"
+                        rounded="lg">
+                        <h1 class="text-center">{{ cardTitle }}</h1>
                         <div class="text-subtitle-1 text-medium-emphasis">E-mail</div>
 
                         <v-text-field density="compact" placeholder="Email address" variant="outlined"
@@ -115,11 +127,11 @@ export default defineComponent({
 
                         <v-card-text class="text-center">
                             <v-btn class="text-blue text-decoration-none" variant="text" size="small" height="auto"
-                                width="auto" @click="goToLoginRegisterView()">
+                                width="auto" @click="swapBetweenLoginRegisterView()">
                                 <p v-if="route.name === 'login'"
-                                    v-html="'Ainda não tem cadastro?<br>Crie sua conta agora'">
+                                    v-html="'Ainda não tem cadastro?<br>Clique aqui e crie uma conta.'">
                                 </p>
-                                <p v-else v-html="'Já tem cadastro?<br>Faça login agora.'">
+                                <p v-else v-html="'Já tem cadastro?<br>Clique aqui e faça o login.'">
                                 </p>
                             </v-btn>
                         </v-card-text>
