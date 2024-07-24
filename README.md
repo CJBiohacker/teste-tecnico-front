@@ -20,7 +20,7 @@ Por fim, precisamos apresentar essas informações de forma intuitiva e dinâmic
 
 #### Observações
 - É interessante o código ter tratamento de erros e feedbacks visuais para o usuário.
-- Para os gráficos recomendamos que utilize o apex charts, porém sinta-se livre para usar outra lib de sua escolha
+- Para os gráficos recomendamos que utilize o apex charts, porém sinta-se livre para usar outra lib de sua escolha [FALTANDO]
 
 ## O que nós esperamos do seu teste
 - Ver na solução a utilização do Vue Js na versão 3
@@ -28,11 +28,11 @@ Por fim, precisamos apresentar essas informações de forma intuitiva e dinâmic
 - Um HTML escrito da maneira mais semântica possível (HTML5/5.1)
 - Um código bem escrito (Modularização, Nomenclaturas, Padronização, Reutilização, etc)
 - Mobile first e layout responsivo
-- Testes unitários
+- Testes unitários [FALTANDO]
 
 ### O que nos impressionaria
 - Alguma metodologia para definição e organização do seu código CSS/Tailwind
-- Testes de aceitação
+- Testes de aceitação [FALTANDO]
 - Aplicação de animações em css quando possível e tome cuidado com a performance
 - Ver o código rodando live (Heroku, Firebase Hosting, Bucket estático S3, etc )
 

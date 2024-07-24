@@ -1,14 +1,21 @@
 <script>
-import resourceService from '@/services/resource.service';
+import { reactive, ref } from 'vue';
+import { useSnackBarStore } from '@/stores/snackbar';
 import router from '@/router';
+import userService from '@/services/user.service';
 
 
 export default {
     async setup() {
+        const name = ref('');
+        const job = ref('');
 
+        const isWindowOpen = reactive({ value: false });
+        const isLoading = reactive({ value: false })
+        const nameRules = reactive([v => !!v || 'Digite um nome', v => v.length > 3 || 'O nome precisa ter no mínimo 3 caracteres']);
+        const jobRules = reactive([v => !!v || 'Digite uma profissão/ocupação.', v => v.length > 5 || 'A profissão/ocupação precisa ter no mínimo 5 caracteres']);
 
-        const isAddUserWindowOpen = () => {
-        }
+        const openAddUserWindow = () => isWindowOpen.value = !isWindowOpen.value
 
         const goToUserCardsListView = () => {
             router.push({ name: 'listUsers' });
@@ -18,84 +25,42 @@ export default {
 
         }
 
-        return {
-            responsiveValue,
-            isAddUserWindowOpen,
-            goToUserCardsListView,
-            goToResourcesListView
+        const isValidForm = () => {
+            const condition = name.length >= 3 && job.length >= 5;
+            console.log("🚀 ~ isValidForm ~ condition:", condition)
+            return condition;
         }
 
+        const handleForm = async () => {
+            const snackStore = useSnackBarStore();
+            isLoading.value = !isLoading.value;
+            const userData = {
+                name: name.value,
+                job: job.value,
+            }
+            const response = await userService.addUser(userData);
+            isLoading.value = !isLoading.value;
+            if (response.status === 200 || response.status === 201) {
+                snackStore.updateMessage(`Usuário ${userData.name} foi adicionado com sucesso!`);
+            } else {
+                snackStore.updateMessage("Falha ao adicionar o usuário.");
+            }
+            openAddUserWindow();
+        }
 
-        // console.log("🚀 ~ colorsData ~ colorsData:", colorsData)
-        // console.log("🚀 ~ setup ~ resourceNamesList:", seriesData)
-
-        // color: "#98B2D1"
-        // id: 1
-        // name: "cerulean"
-        // pantone_value: "15-4020"
-        // year: 2000
-
-        //    const series = [
-        //         {
-        //           data: seriesData
-        //         }
-        //       ]
-
-        //     const chartOptions = {
-        //         legend: {
-        //           show: true
-        //         },
-        //         chart: {
-        //           height: 350,
-        //           type: 'treemap'
-        //         },
-        //         title: {
-        //           text: 'Mapeamento de Recurso por cor'
-        //         },
-        //         colors: colorsData,
-        //         plotOptions: {
-        //           treemap: {
-        //             distributed: true,
-        //             enableShades: false
-        //           }
-        //         }
-        //       }
-
-        //       <div>
-        //             <apexchart class="ma-8" :width="responsiveValue.width" heigth="600" type="treemap" :options="chartOptions" :series="series"></apexchart>
-        //         </div>
-        // const { displayValues } = useDisplayStore();
-
-        // const listedResources = await resourceService.listResources()
-        // console.log("🚀 ~ setup ~ listedResources:", listedResources)
-
-        // const seriesData = listedResources.data.map((resource) => {
-        //     return {
-        //         x: resource.name,
-        //         y: resource.pantone_value,
-        //     }
-        // })
-
-        // const colorsData = listedResources.data.map((resource) => {
-        //     return resource.color
-        // })
-        // const responsiveValue = computed(() => {
-        //     const { width, height } = displayValues;
-
-        //     if (width <= 1920) {
-        //         return {
-        //             width: 680,
-        //             height
-        //         }
-        //     }
-
-        //     if (width <= 810) {
-        //         return {
-        //             width,
-        //             height
-        //         }
-        //     }
-        // })
+        return {
+            name,
+            job,
+            isWindowOpen,
+            isLoading,
+            nameRules,
+            jobRules,
+            openAddUserWindow,
+            goToUserCardsListView,
+            goToResourcesListView,
+            isValidForm,
+            handleForm
+        }
     },
 };
 
@@ -112,15 +77,45 @@ export default {
                 </p>
             </div>
             <div class="d-flex flex-column ga-10">
-                <v-btn rounded="lg" variant="flat" color="green" @click="isAddUserWindowOpen()">Adicionar um
+                <v-btn rounded="lg" variant="flat" color="green" @click="openAddUserWindow()">Adicionar um
                     usuário</v-btn>
                 <v-btn rounded="lg" variant="flat" color="purple" @click="goToUserCardsListView()">Listar todos
                     usuários</v-btn>
                 <v-btn rounded="lg" variant="flat" color="deep-orange" @click="goToResourcesListView()">Mapear
                     recursos</v-btn>
             </div>
-
         </v-card>
+        <v-sheet elevation="24" height="500" width="360" id="dashboard-add-user-window"
+            :style="`${isWindowOpen.value ? 'display: flex; flex-direction:column; z-index: 100' : 'display: none'}`"
+            rounded>
+
+            <v-form fast-fail @submit.prevent="handleForm()">
+                <v-card class="mx-auto pa-12 pb-8" :loading="isLoading.value" elevation="8" max-width="448"
+                    rounded="lg">
+                    <h1 class="text-center">Adicionar Usuário</h1>
+                    <div class="text-subtitle-1 text-medium-emphasis">Nome</div>
+
+                    <v-text-field density="compact" placeholder="Digite seu nome completo" variant="outlined"
+                        :rules="nameRules" v-model="name"></v-text-field>
+
+                    <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
+                        Profissão
+                    </div>
+
+                    <v-text-field density="compact" placeholder="Digite seu nome completo" variant="outlined"
+                        :rules="jobRules" v-model="job"></v-text-field>
+
+                    <v-btn class="mb-8 add-user-button" color="blue" size="large" variant="tonal" type="submit"
+                        :disabled="isValidForm()" block>
+                        Enviar
+                    </v-btn>
+                    <v-btn class="mb-8 add-user-button" color="red" size="large" variant="tonal"
+                        @click="openAddUserWindow()" block>
+                        Fechar
+                    </v-btn>
+                </v-card>
+            </v-form>
+        </v-sheet>
     </v-container>
 </template>
 
@@ -131,5 +126,16 @@ export default {
     .dashboard-card {
         height: 100%;
     }
+
+    .add-user-button {
+        width: 80%;
+    }
+}
+
+#dashboard-add-user-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 </style>
