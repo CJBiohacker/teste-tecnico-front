@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, ref, reactive, computed } from 'vue';;
 import { useDisplayStore } from '@/stores/display';
-import SingleUserCard from './SingleUserCard.vue';
+import SingleUserCard from '@/components/SingleUserCard.vue';
 import userService from '@/services/user.service';
 import helpers from '@/helpers/helpers';
 
@@ -13,7 +13,6 @@ export default defineComponent({
     
   },
   async setup() {
-
     const { displayValues } = useDisplayStore();
     const search = ref('');
     const isLoading = reactive({ value: false })

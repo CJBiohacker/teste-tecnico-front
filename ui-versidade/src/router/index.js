@@ -29,7 +29,7 @@ const router = createRouter({
       component: () => LoginRegisterView
     },
     {
-      path: '/dashboard/:id',
+      path: '/dashboard/',
       name: 'dashboard',
       component: () => DashboardView
     }
