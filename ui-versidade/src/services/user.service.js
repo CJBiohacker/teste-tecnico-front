@@ -5,9 +5,9 @@ const userService = {
     const userStore = useUserStore()
     return userStore.getUserById(userId)
   },
-  async listUsers(pageNumber) {
+  async listUsers() {
     const userStore = useUserStore()
-    return userStore.listUsers(pageNumber)
+    return userStore.listUsers()
   },
   async addUser(userData) {
     const userStore = useUserStore()
