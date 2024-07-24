@@ -13,8 +13,8 @@ export default {
     <v-container id="welcome-container" fluid>
         <v-col cols="md-4" offset="lg-4" id="welcome-box">
             <v-card color="light" elevation="8" variant="flat" class="mx-auto pa-10 text-body-1 d-flex flex-column align-center justify-space-evenly" id="welcome-card">
-                <div class="d-flex flex-column align-center justify-center">
-                    <p class="text-center text-h4">Seja bem vindo ao UI-Versidade</p>
+                <div class="d-flex flex-column align-center justify-center ga-2">
+                    <p class="text-center text-h4">Seja bem vindo ao<br> UI-Versidade</p>
                     <p class="text-center text-subtitle-1">O melhor sistema de Gerenciamento para sua Instituição Educacional.</p>
                     <p class="text-center text-subtitle-1">Administre cadastros de usuários e recurso em segundos.</p>
                     <p class="text-center text-subtitle-1">Faça o Login ou seu Cadastro</p>

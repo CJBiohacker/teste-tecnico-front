@@ -8,7 +8,7 @@ import userService from '@/services/user.service';
 export default {
     async setup() {
         const name = ref('');
-        const job = ref('');
+        const job = ref('')
 
         const isWindowOpen = reactive({ value: false });
         const isLoading = reactive({ value: false })
@@ -26,9 +26,8 @@ export default {
         }
 
         const isValidForm = () => {
-            const condition = name.length >= 3 && job.length >= 5;
-            console.log("🚀 ~ isValidForm ~ condition:", condition)
-            return condition;
+            const condition = name.value.length >= 3 && job.value.length >= 5;
+            return !condition;
         }
 
         const handleForm = async () => {
@@ -69,6 +68,7 @@ export default {
 <template>
     <v-container id="dashboard-container" fluid>
         <v-card color="light" elevation="8" variant="flat"
+        :style="`${!isWindowOpen.value ? 'display: flex' : 'display: none !important'}`"
             class="mx-auto d-flex flex-column align-center justify-space-evenly dashboard-card">
             <div>
                 <v-card-title class="text-h4 text-center">DashBoard</v-card-title>
@@ -85,7 +85,7 @@ export default {
                     recursos</v-btn>
             </div>
         </v-card>
-        <v-sheet elevation="24" height="500" width="360" id="dashboard-add-user-window"
+        <v-sheet elevation="24" width="auto"  id="dashboard-add-user-window"
             :style="`${isWindowOpen.value ? 'display: flex; flex-direction:column; z-index: 100' : 'display: none'}`"
             rounded>
 
