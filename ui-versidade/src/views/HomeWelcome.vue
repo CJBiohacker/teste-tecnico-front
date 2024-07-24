@@ -1,18 +1,12 @@
 <script>
-import { defineComponent } from 'vue';
 import router from '@/router';
 
-export default defineComponent({
+export default {
     setup() {
-        const goToLoginRegisterView = (path) => {
-            router.push({path});
-        }
-
-        return {
-            goToLoginRegisterView,
-        }
+        const goToLoginRegisterView = path => router.push({ path });
+        return { goToLoginRegisterView }
     },
-});
+};
 </script>
 
 <template>
@@ -21,7 +15,7 @@ export default defineComponent({
             <v-card color="light" elevation="8" variant="flat" class="mx-auto text-body-1" id="welcome-card">
                 <v-row class="welcome-row" align="center" justify="center" no-gutters>
                     <p class="text-center">SEJA BEM VINDO <br>ao<br> UI-Versidade </p>
-                    <p class="text-center">O melhor sistema de Gerenciamento para sua Instituição Educacional.<br>
+                    <p class="text-justify">O melhor sistema de Gerenciamento para sua Instituição Educacional.<br>
                         Crie, edite, liste e exclua cadastros de alunos e professores em alguns segundos.</p>
                 </v-row>
                 <v-row class="welcome-row" align="center" justify="center" no-gutters>
