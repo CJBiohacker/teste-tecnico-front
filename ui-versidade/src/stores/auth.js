@@ -5,39 +5,28 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null,
-    token: null,
-    isLoading: false,
-    error: null
+    userId: null,
+    token: null
   }),
   actions: {
     async register(userData) {
-      this.isLoading = true
-      this.error = null
-
       try {
         const response = await axios.post(`${API_BASE_URL}/register'`, userData)
-        this.user = response.data.user
-        this.isLoading = false
+        this.userId = response.data.id
+        return response
       } catch (error) {
-        this.error = error.message
-        this.isLoading = false
+        return error
       }
     },
     async login(credentials) {
-      this.isLoading = true
-      this.error = null
-
       try {
         const response = await axios.post(`${API_BASE_URL}/login`, credentials)
-        const { token, user } = response.data
+        const { token } = response.data
         this.token = token
-        this.user = user
         localStorage.setItem('authToken', token)
-        this.isLoading = false
+        return response
       } catch (error) {
-        this.error = error.message
-        this.isLoading = false
+        return error
       }
     },
     logout() {
